@@ -1,0 +1,10 @@
+print("hello world")
+print("接口 G 0/0 状态为UP")
+ip_adress1 = "192.168.1.1"
+print(ip_adress1)
+user_ip = input("请输入你的ip地址:")
+print(user_ip)
+name1 = input("请输入设备名称")
+user1_ip = input("请输入管理ip地址：")
+print(name1)
+print(user1_ip)

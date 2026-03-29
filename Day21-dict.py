@@ -13,6 +13,6 @@ firewall = {
 name = firewall["name"]
 ip = firewall["ip"]
 print(f"正在配置设备{name}，管理ip为{ip}。")
-firewall["port"] = "8443"
+firewall["port"] = 8443  #纯数字可以不加引号
 firewall["ip"] = "10.255.255.1"
 print(firewall)

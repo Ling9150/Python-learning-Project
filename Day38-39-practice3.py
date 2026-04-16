@@ -1,4 +1,5 @@
 import requests
+import yaml
 r = requests.get("https://jsonplaceholder.typicode.com/users")
 p_r = r.json()
 #print(p_r)
@@ -24,3 +25,7 @@ for d in p_r:
         data["coordinates"]["lng"] = float(lng)
         final_data["monitoring_targets"].append(data)
 print(final_data)
+yaml_data = yaml.safe_dump(final_data)
+print(yaml_data)
+with open("deploy.yaml","w",encoding="utf-8")as file:
+    file.write(yaml_data)

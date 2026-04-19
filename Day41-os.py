@@ -7,7 +7,7 @@ base_dir = "Network_Logs"
 today = "2026-04-18"
 target_path = f"{base_dir}/{today}"
 r = os.path.exists(target_path)
-if r == "True":
+if r == True:  #也可以是if r：
     print("已存在")
 else:
     os.makedirs(target_path)

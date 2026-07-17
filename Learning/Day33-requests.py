@@ -6,3 +6,8 @@ print(package.status_code)
 json_data = package.text
 data = json.loads(json_data) #解析功能已有，可以直接这样写：data = package.json()
 print(f"获取到{data}") #改进做法：data["ip"]
+res = requests.get("https://books.toscrape.com/")
+if res.ok:
+    print(res.text)
+else:
+    print("失败")

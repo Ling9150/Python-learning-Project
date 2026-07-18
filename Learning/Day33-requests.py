@@ -1,5 +1,6 @@
 import requests
 import json
+from bs4 import BeautifulSoup
 package = requests.get("https://api.ipify.org?format=json")
 print(package.status_code)
 #改进做法：if package.status_code == 200
@@ -16,3 +17,5 @@ head = {
 }
 r = requests.get("https://movie.douban.com/top250",headers=head)
 print(r.status_code)
+soup = BeautifulSoup(r.text,"html.parser")
+print(soup.h)

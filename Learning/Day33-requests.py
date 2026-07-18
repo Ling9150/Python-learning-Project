@@ -18,4 +18,4 @@ head = {
 r = requests.get("https://movie.douban.com/top250",headers=head)
 print(r.status_code)
 soup = BeautifulSoup(r.text,"html.parser")
-print(soup.h)
+print(soup.h1)

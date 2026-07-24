@@ -13,24 +13,37 @@ class Dependency:
         return self.name
 
 def parse_req(file_path):
-    box = []
+    deps = []
+    operators = ["==", ">=", "<=", "~=", ">", "<"]
     with open(file_path,"r",encoding="utf-8")as f:
         lines = f.readlines()
     for line in lines:
         line = line.strip()
         if not line or line.startswith("#"):
             continue
-        part = line.split("==")
-        pac_name = part[0].strip()
-        pac_version = part[1].strip()
-        card = Dependency(
-            name = pac_name,
+        operator_found = None
+        for op in operators:
+            if op in line:
+                operator_found = op
+                break
+        if operator_found is None:
+            dep = Dependency(
+                name=line,
+                operator=None,
+                version=None,
+                raw_line=line
+            )
+            deps.append(dep)
+            continue
+        name,version = line.split(operator_found,1)
+        dep = Dependency(
+            name = name.strip(),
             operator = "==",
-            version=pac_version,
+            version=version.strip(),
             raw_line=line
         )
-        box.append(card)
-    return box
+        deps.append(dep)
+    return deps
 
 if __name__ == "__main__":
     parse_req("../test_files/sample_requirements.txt")

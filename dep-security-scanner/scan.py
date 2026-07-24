@@ -8,6 +8,7 @@ import argparse
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
+import os
 
 def check(dep):
     url = "https://api.osv.dev/v1/query"
@@ -72,9 +73,12 @@ def parse_args():
     return parser.parse_args()
 
 def get_ai_advice(vuln):
+    api_key = os.getenv("SILICONFLOW_API_KEY")
+    if not api_key:
+        return "AI advice skipped:SILICONFLOW_API_KEY is not set"
     client = OpenAI(
-        api_key="sk-#",
-        base_url = "https://api.siliconflow.cn/v1"
+        api_key = api_key,
+        base_url = "https://api-inference.modelscope.cn/v1/"
     )
     prompt = f"""
     you are a security engineer,please analyze the following vulnerability:
@@ -88,7 +92,7 @@ def get_ai_advice(vuln):
     3.Upgrade command"""
     try:
         response = client.chat.completions.create(
-            model = "moonshotai/Kimi-K2.7-Code",
+            model = "deepseek-ai/DeepSeek-V4-Flash",
             messages = [
                 {
                     "role":"user",
@@ -102,7 +106,7 @@ def get_ai_advice(vuln):
 
 def generate_report(output_path,target_path,deps,all_vulns,stats):
     with open(output_path,"w",encoding="utf-8")as f:
-        f.write("Dependency Security Scan Report\n\n")
+        f.write("#Dependency Security Scan Report\n\n")
 
         f.write(f"Scan file: {target_path}\n\n")
         f.write(f"Scan time: {datetime.now().isoformat()}\n\n")
@@ -119,7 +123,7 @@ def generate_report(output_path,target_path,deps,all_vulns,stats):
         f.write("|---|---|---|---|---|\n")
         for vuln in all_vulns:
             f.write(
-                f"{vuln.pac_name}|{vuln.version}|{vuln.severity}|{vuln.vuln_id}|{vuln.summary}"
+                f"|{vuln.pac_name}|{vuln.version}|{vuln.severity}|{vuln.vuln_id}|{vuln.summary}|\n"
             )
 
 def main():
@@ -142,6 +146,9 @@ def main():
     console.print(f"[green]Loaded {len(deps)} dependencies[/green]")
 
     for dep in deps:
+        if dep.version is None:
+            console.print(f"[yellow]Skipped {dep.name}: version is not specified[/yellow]")
+            continue
         raw_result = get_cache(
             dep.name,
             dep.version

@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+
+cache.db
+report.md
+streamlit_report.md
+uploaded_requirements.txt
+
+.env
+.env.*
+!.env.example
+report_*.md
